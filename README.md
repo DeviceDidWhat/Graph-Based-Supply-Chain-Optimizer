@@ -5,7 +5,6 @@ A powerful, interactive supply chain network optimization tool built with Python
 ![Python](https://img.shields.io/badge/Python-3.8+-blue.svg)
 ![Streamlit](https://img.shields.io/badge/Streamlit-1.28+-red.svg)
 ![NetworkX](https://img.shields.io/badge/NetworkX-3.0+-green.svg)
-![License](https://img.shields.io/badge/License-MIT-yellow.svg)
 
 
 ## 🎯 Overview
