@@ -1,4 +1,4 @@
-# 🚚 Advanced Graph-Based Supply Chain Optimizer
+# Advanced Graph-Based Supply Chain Optimizer
 
 A powerful, interactive supply chain network optimization tool built with Python, NetworkX, and Streamlit. This application demonstrates advanced graph algorithms for real-world logistics and supply chain management problems.
 
@@ -7,19 +7,6 @@ A powerful, interactive supply chain network optimization tool built with Python
 ![NetworkX](https://img.shields.io/badge/NetworkX-3.0+-green.svg)
 ![License](https://img.shields.io/badge/License-MIT-yellow.svg)
 
-## 📋 Table of Contents
-
-- [Overview](#overview)
-- [Features](#features)
-- [Network Architecture](#network-architecture)
-- [Installation](#installation)
-- [Usage](#usage)
-- [Algorithms](#algorithms)
-- [Project Structure](#project-structure)
-- [Screenshots](#screenshots)
-- [Technical Details](#technical-details)
-- [Contributing](#contributing)
-- [License](#license)
 
 ## 🎯 Overview
 
@@ -88,7 +75,7 @@ Layer 5: Stores (10)
 
 **Total Network:**
 - **Nodes:** 29
-- **Edges:** 80+
+- **Edges:** 70+
 - **Connectivity:** ~95% supplier-to-store reachability
 - **Redundancy:** Multiple alternative paths for most routes
 
@@ -331,34 +318,7 @@ In `compute_semantic_positions()`, modify spacing:
 spread(suppliers, x_pos=0, y_gap=3.0)  # Increase vertical spacing
 ```
 
-## 🤝 Contributing
-
-Contributions are welcome! Please follow these steps:
-
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
-
-### Areas for Contribution
-- Additional algorithms (A*, Bellman-Ford, Floyd-Warshall)
-- More network metrics and analytics
-- Export functionality (PDF, JSON, CSV)
-- Multi-objective optimization
-- Machine learning integration
-- Performance optimizations
-- Unit tests and documentation
-
-## 📝 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## 👥 Authors
-
-- **Your Name** - *Initial work* - [YourGitHub](https://github.com/yourusername)
-
-## 🙏 Acknowledgments
+## Acknowledgments
 
 - NetworkX library for graph algorithms
 - Streamlit for the web framework
@@ -366,12 +326,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - Matplotlib for visualization
 - The open-source community
 
-## 📧 Contact
-
-For questions or feedback:
-- **Email:** your.email@example.com
-- **GitHub:** [@yourusername](https://github.com/yourusername)
-- **LinkedIn:** [Your Name](https://linkedin.com/in/yourprofile)
 
 ## 🔗 Links
 
@@ -384,5 +338,3 @@ For questions or feedback:
 ---
 
 ⭐ If you found this project helpful, please consider giving it a star!
-
-**Made with ❤️ and Python**
