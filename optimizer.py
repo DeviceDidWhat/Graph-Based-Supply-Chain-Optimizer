@@ -116,7 +116,7 @@ def find_optimal_assignment(G):
 
 
 # ============================================================
-# PART 3 — SHORTEST PATH & REROUTING
+# PART 3 — SHORTEST PATH & ROUTING ALGORITHMS
 # ============================================================
 
 def find_shortest_path(G, start_node, end_node):
@@ -127,6 +127,135 @@ def find_shortest_path(G, start_node, end_node):
         return path, cost
     except nx.NetworkXNoPath:
         return None, None
+
+
+def find_k_shortest_paths(G, start_node, end_node, k=3):
+    """
+    Finds k shortest paths between two nodes.
+    Returns list of (path, cost) tuples.
+    """
+    try:
+        paths = []
+        for path in nx.shortest_simple_paths(G, start_node, end_node, weight='weight'):
+            if len(paths) >= k:
+                break
+            cost = sum(G[path[i]][path[i+1]]['weight'] for i in range(len(path)-1))
+            paths.append((path, cost))
+        return paths
+    except (nx.NetworkXNoPath, nx.NodeNotFound):
+        return []
+
+
+def calculate_network_flow(G, source_nodes, sink_nodes):
+    """
+    Calculate maximum flow from multiple sources to multiple sinks.
+    Useful for capacity planning.
+    """
+    # Create a super source and super sink
+    G_flow = G.copy()
+    G_flow.add_node('super_source')
+    G_flow.add_node('super_sink')
+    
+    # Connect super source to all source nodes
+    for source in source_nodes:
+        if source in G_flow:
+            G_flow.add_edge('super_source', source, capacity=1000)
+    
+    # Connect all sink nodes to super sink
+    for sink in sink_nodes:
+        if sink in G_flow:
+            G_flow.add_edge(sink, 'super_sink', capacity=1000)
+    
+    # Add capacity to all edges (equal to inverse of weight for simplicity)
+    for u, v in G_flow.edges():
+        if 'capacity' not in G_flow[u][v]:
+            G_flow[u][v]['capacity'] = 100
+    
+    try:
+        flow_value = nx.maximum_flow_value(G_flow, 'super_source', 'super_sink', capacity='capacity')
+        return flow_value
+    except:
+        return 0
+
+
+def find_critical_nodes(G, top_n=5):
+    """
+    Identifies critical nodes using betweenness centrality.
+    Returns nodes that are most crucial for network connectivity.
+    """
+    try:
+        betweenness = nx.betweenness_centrality(G, weight='weight')
+        sorted_nodes = sorted(betweenness.items(), key=lambda x: x[1], reverse=True)[:top_n]
+        return sorted_nodes
+    except:
+        return []
+
+
+def analyze_network_resilience(G, node_to_remove):
+    """
+    Analyzes impact of removing a node on network connectivity.
+    Returns connectivity metrics before and after removal.
+    """
+    suppliers = [n for n, d in G.nodes(data=True) if d['type'] == 'supplier']
+    stores = [n for n, d in G.nodes(data=True) if d['type'] == 'store']
+    
+    # Before removal
+    connected_before = 0
+    for s in suppliers:
+        for r in stores:
+            try:
+                nx.shortest_path(G, s, r)
+                connected_before += 1
+            except:
+                pass
+    
+    # After removal
+    G_temp = G.copy()
+    if node_to_remove in G_temp:
+        G_temp.remove_node(node_to_remove)
+    
+    connected_after = 0
+    for s in suppliers:
+        if s in G_temp:
+            for r in stores:
+                if r in G_temp:
+                    try:
+                        nx.shortest_path(G_temp, s, r)
+                        connected_after += 1
+                    except:
+                        pass
+    
+    total_pairs = len(suppliers) * len(stores)
+    impact = ((connected_before - connected_after) / total_pairs * 100) if total_pairs > 0 else 0
+    
+    return {
+        'connected_before': connected_before,
+        'connected_after': connected_after,
+        'total_pairs': total_pairs,
+        'connectivity_loss_pct': impact
+    }
+
+
+def calculate_route_efficiency(G, path):
+    """
+    Calculates various efficiency metrics for a given route.
+    """
+    if not path or len(path) < 2:
+        return None
+    
+    total_cost = sum(G[path[i]][path[i+1]]['weight'] for i in range(len(path)-1))
+    avg_cost_per_hop = total_cost / (len(path) - 1)
+    
+    # Get node types in path
+    node_types = set([G.nodes[n]['type'] for n in path])
+    
+    return {
+        'total_cost': total_cost,
+        'num_hops': len(path) - 1,
+        'avg_cost_per_hop': avg_cost_per_hop,
+        'node_types_used': len(node_types),
+        'path_length': len(path)
+    }
 
 
 # ============================================================
@@ -197,9 +326,12 @@ def compute_label_positions(pos):
 if __name__ == "__main__":
     G = build_graph()
 
-    print("\n=== COMPLEX SUPPLY CHAIN NETWORK ===")
-    print(f"Total Nodes: {G.number_of_nodes()}")
-    print(f"Total Edges: {G.number_of_edges()}")
+    print("\n" + "="*60)
+    print("COMPLEX SUPPLY CHAIN NETWORK ANALYSIS")
+    print("="*60)
+    print(f"\n📊 Network Overview:")
+    print(f"   • Total Nodes: {G.number_of_nodes()}")
+    print(f"   • Total Edges: {G.number_of_edges()}")
     
     suppliers = [n for n, d in G.nodes(data=True) if d['type'] == 'supplier']
     warehouses = [n for n, d in G.nodes(data=True) if d['type'] == 'warehouse']
@@ -207,44 +339,102 @@ if __name__ == "__main__":
     hubs = [n for n, d in G.nodes(data=True) if d['type'] == 'hub']
     stores = [n for n, d in G.nodes(data=True) if d['type'] == 'store']
     
-    print(f"Suppliers: {len(suppliers)}, Warehouses: {len(warehouses)}, Distribution Centers: {len(distributions)}")
-    print(f"Hubs: {len(hubs)}, Stores: {len(stores)}\n")
+    print(f"   • Suppliers: {len(suppliers)}")
+    print(f"   • Warehouses: {len(warehouses)}")
+    print(f"   • Distribution Centers: {len(distributions)}")
+    print(f"   • Hubs: {len(hubs)}")
+    print(f"   • Stores: {len(stores)}")
 
-    print("--- Part 2: Optimal Assignment (Hungarian) ---")
+    print("\n" + "-"*60)
+    print("1️⃣  OPTIMAL ASSIGNMENT (Hungarian Algorithm)")
+    print("-"*60)
     assignments, cost = find_optimal_assignment(G)
-    print(f"Optimal Assignments: {assignments}")
-    print(f"Total Assignment Cost: ${cost}\n")
+    print(f"✅ Optimal Supplier → Warehouse Assignments:")
+    for s, w in assignments:
+        if G.has_edge(s, w):
+            edge_cost = G[s][w]['weight']
+            print(f"   {s} ➜ {w} (Cost: ${edge_cost})")
+    print(f"\n💰 Total Assignment Cost: ${cost}")
 
-    print("--- Part 3: Shortest Path (Dijkstra) ---")
+    print("\n" + "-"*60)
+    print("2️⃣  SHORTEST PATH ANALYSIS (Dijkstra)")
+    print("-"*60)
     start, end = "S1", "R10"
     path, cost = find_shortest_path(G, start, end)
     if path:
-        print(f"Shortest path from {start} to {end}: {' -> '.join(path)}")
-        print(f"Cost: ${cost}\n")
+        print(f"📍 Route: {start} → {end}")
+        print(f"   Path: {' → '.join(path)}")
+        print(f"   Cost: ${cost}")
+        
+        # Calculate efficiency
+        efficiency = calculate_route_efficiency(G, path)
+        if efficiency:
+            print(f"   Hops: {efficiency['num_hops']}")
+            print(f"   Avg Cost/Hop: ${efficiency['avg_cost_per_hop']:.2f}")
     else:
-        print(f"No path found from {start} to {end}\n")
+        print(f"❌ No path found from {start} to {end}")
 
-    print("--- Part 4: Dynamic Rerouting ---")
+    print("\n" + "-"*60)
+    print("3️⃣  ALTERNATIVE ROUTES (K-Shortest Paths)")
+    print("-"*60)
+    k_paths = find_k_shortest_paths(G, start, end, k=3)
+    if k_paths:
+        for i, (path, cost) in enumerate(k_paths, 1):
+            print(f"Option {i}: {' → '.join(path)}")
+            print(f"   Cost: ${cost} | Hops: {len(path)-1}")
+    else:
+        print(f"No alternative paths found")
+
+    print("\n" + "-"*60)
+    print("4️⃣  DYNAMIC REROUTING (Node Failure Simulation)")
+    print("-"*60)
     broken_node = "D2"
-    print(f"Simulating failure of node: {broken_node}")
+    print(f"⚠️  Simulating failure of node: {broken_node}")
 
     G_broken = G.copy()
     G_broken.remove_node(broken_node)
     path_new, cost_new = find_shortest_path(G_broken, start, end)
+    
     if path_new:
-        print(f"New shortest path: {' -> '.join(path_new)} (Cost: ${cost_new})")
+        print(f"✅ Alternative route found:")
+        print(f"   New Path: {' → '.join(path_new)}")
+        print(f"   New Cost: ${cost_new}")
+        if path:
+            cost_increase = cost_new - cost
+            pct_increase = (cost_increase / cost) * 100
+            print(f"   Impact: +${cost_increase} (+{pct_increase:.1f}%)")
     else:
-        print(f"No path found after failure of {broken_node}.")
+        print(f"❌ No alternative path exists after {broken_node} failure")
 
-    # ========================================================
-    # Visualization (Non-overlapping version)
-    # ========================================================
+    print("\n" + "-"*60)
+    print("5️⃣  CRITICAL NODE ANALYSIS")
+    print("-"*60)
+    critical = find_critical_nodes(G, top_n=5)
+    print("🎯 Most Critical Nodes (by betweenness centrality):")
+    for i, (node, centrality) in enumerate(critical, 1):
+        node_type = G.nodes[node]['type'].title()
+        print(f"   {i}. {node} ({node_type}) - Centrality: {centrality:.4f}")
 
+    print("\n" + "-"*60)
+    print("6️⃣  NETWORK RESILIENCE TEST")
+    print("-"*60)
+    test_node = "W2"
+    resilience = analyze_network_resilience(G, test_node)
+    print(f"Testing removal of: {test_node}")
+    print(f"   Connected routes before: {resilience['connected_before']}/{resilience['total_pairs']}")
+    print(f"   Connected routes after: {resilience['connected_after']}/{resilience['total_pairs']}")
+    print(f"   Connectivity loss: {resilience['connectivity_loss_pct']:.2f}%")
+
+    # Visualization
+    print("\n" + "-"*60)
+    print("📈 GENERATING VISUALIZATION...")
+    print("-"*60)
+    
     pos = compute_semantic_positions(G)
     label_pos = compute_label_positions(pos)
     colors = get_node_colors(G, path)
 
-    plt.figure(figsize=(18, 10))
+    plt.figure(figsize=(20, 11))
     nx.draw(
         G, pos,
         with_labels=False,
@@ -259,10 +449,25 @@ if __name__ == "__main__":
         alpha=0.7
     )
     nx.draw_networkx_labels(G, label_pos, font_size=9, font_weight='bold')
+    
+    # Highlight shortest path edges
+    if path and len(path) > 1:
+        path_edges = list(zip(path, path[1:]))
+        nx.draw_networkx_edges(
+            G, pos,
+            edgelist=path_edges,
+            width=4,
+            edge_color='#e63946',
+            arrows=True,
+            arrowsize=20
+        )
+    
     edge_labels = nx.get_edge_attributes(G, 'weight')
     nx.draw_networkx_edge_labels(G, pos, edge_labels=edge_labels, font_size=7)
 
-    plt.title("Complex Supply Chain Network", fontsize=16, pad=20)
+    plt.title("Complex Supply Chain Network - Optimal Route Highlighted", fontsize=16, pad=20)
     plt.axis('off')
     plt.tight_layout()
     plt.show()
+    
+    print("\n✅ Analysis complete!\n")
