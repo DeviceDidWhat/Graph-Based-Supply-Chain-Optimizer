@@ -280,14 +280,6 @@ supply-chain-optimizer/
 ├── app.py                    # Streamlit web interface
 ├── requirements.txt          # Python dependencies
 ├── README.md                 # This file
-│
-├── assets/                   # Screenshots & diagrams (optional)
-│   ├── network_viz.png
-│   └── dashboard.png
-│
-└── tests/                    # Unit tests (optional)
-    ├── test_algorithms.py
-    └── test_graph.py
 ```
 
 ---
@@ -369,22 +361,6 @@ Companies like Amazon use similar graph-based systems to:
 
 ---
 
-## 📸 Screenshots
-
-### Main Dashboard
-![Dashboard](assets/dashboard.png)
-*Interactive control panel with 4 operation modes*
-
-### Network Visualization
-![Network](assets/network_viz.png)
-*Layered graph showing optimal route from S1 to R10*
-
-### Resilience Testing
-![Resilience](assets/resilience.png)
-*Impact analysis of D2 node failure*
-
----
-
 ## 🎓 Educational Value
 
 ### Concepts Demonstrated
@@ -419,36 +395,6 @@ Companies like Amazon use similar graph-based systems to:
 
 Contributions are welcome! Here are some ways you can help:
 
-### Ideas for Enhancement
-- [ ] Add time-based routing (considering traffic/delays)
-- [ ] Implement genetic algorithms for global optimization
-- [ ] Add machine learning for demand prediction
-- [ ] Create 3D visualization with geographic mapping
-- [ ] Support for multi-commodity flow problems
-- [ ] Real-time data integration (live traffic, weather)
-
-### How to Contribute
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
-
----
-
-## 📝 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
----
-
-## 👨‍💻 Author
-
-**Your Name**
-- GitHub: [@yourusername](https://github.com/yourusername)
-- LinkedIn: [Your Profile](https://linkedin.com/in/yourprofile)
-- Email: your.email@example.com
-
 ---
 
 ## 🙏 Acknowledgments
@@ -456,77 +402,9 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - **NetworkX**: For excellent graph algorithms library
 - **Streamlit**: For making interactive web apps simple
 - **SciPy**: For optimization algorithms
-- Course materials from [Your University/Course Name]
 
 ---
 
-## 📚 References
-
-### Academic Papers
-1. Dijkstra, E. W. (1959). "A note on two problems in connexion with graphs"
-2. Kuhn, H. W. (1955). "The Hungarian method for the assignment problem"
-3. Freeman, L. C. (1977). "A set of measures of centrality based on betweenness"
-
-### Books
-- "Introduction to Algorithms" - Cormen, Leiserson, Rivest, Stein
-- "Network Science" - Albert-László Barabási
-- "Supply Chain Management" - Sunil Chopra, Peter Meindl
-
-### Online Resources
-- [NetworkX Documentation](https://networkx.org/documentation/)
-- [Graph Theory Tutorial](https://www.tutorialspoint.com/graph_theory/)
-- [Supply Chain Optimization Guide](https://www.supplychainbrain.com/)
-
----
-
-## 🐛 Known Issues
-
-- Large networks (>200 nodes) may cause slow visualization rendering
-- Edge label overlapping in dense graph regions
-- Path finding may timeout on disconnected subgraphs
-
-See [Issues](https://github.com/yourusername/supply-chain-optimizer/issues) for full list.
-
----
-
-## 🗺️ Roadmap
-
-### Version 2.0 (Planned)
-- [ ] Geographic mapping with real coordinates
-- [ ] Time-window constraints for deliveries
-- [ ] Multi-objective optimization (cost + time + emissions)
-- [ ] Historical data analysis and forecasting
-- [ ] REST API for external integration
-
-### Version 3.0 (Future)
-- [ ] Machine learning for demand prediction
-- [ ] Real-time IoT sensor integration
-- [ ] Blockchain for supply chain transparency
-- [ ] Mobile app for field operators
-
----
-
-## 💡 Tips & Best Practices
-
-### For Students
-- Start with `optimizer.py` to understand the core algorithms
-- Modify edge weights to see how routes change
-- Add new nodes to expand the network
-- Try implementing Bellman-Ford as an alternative to Dijkstra
-
-### For Developers
-- Use the modular structure to add new optimization algorithms
-- Extend node attributes for domain-specific features
-- Implement caching for frequently computed paths
-- Add unit tests for reliability
-
-### For Researchers
-- Integrate real supply chain datasets
-- Compare different routing algorithms
-- Study network resilience under various failure scenarios
-- Publish findings using this framework
-
----
 
 ## ❓ FAQ
 
@@ -544,22 +422,6 @@ A: Yes, Dijkstra's algorithm handles cycles correctly. However, K-shortest paths
 
 **Q: How accurate is the resilience testing?**
 A: It accurately models static network disruption. Real-world factors like partial capacity loss aren't modeled.
-
----
-
-## 🌟 Star History
-
-If you find this project useful, please consider giving it a star! ⭐
-
-[![Star History Chart](https://api.star-history.com/svg?repos=yourusername/supply-chain-optimizer&type=Date)](https://star-history.com/#yourusername/supply-chain-optimizer&Date)
-
----
-
-## 📞 Support
-
-- **Issues**: [GitHub Issues](https://github.com/yourusername/supply-chain-optimizer/issues)
-- **Discussions**: [GitHub Discussions](https://github.com/yourusername/supply-chain-optimizer/discussions)
-- **Email**: support@yourproject.com
 
 ---
 
