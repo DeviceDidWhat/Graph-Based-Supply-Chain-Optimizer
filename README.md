@@ -391,11 +391,6 @@ Companies like Amazon use similar graph-based systems to:
 
 ---
 
-## 🤝 Contributing
-
-Contributions are welcome! Here are some ways you can help:
-
----
 
 ## 🙏 Acknowledgments
 
@@ -404,30 +399,5 @@ Contributions are welcome! Here are some ways you can help:
 - **SciPy**: For optimization algorithms
 
 ---
-
-
-## ❓ FAQ
-
-**Q: Can I use this for my company's actual supply chain?**
-A: This is an educational prototype. For production use, consider enterprise solutions or extensive testing.
-
-**Q: How do I add more nodes?**
-A: Edit the `build_graph()` function in `optimizer.py` to add nodes and edges.
-
-**Q: What if I want to optimize for time instead of cost?**
-A: Change edge weights to represent time. The algorithms work the same way!
-
-**Q: Can this handle cyclic routes?**
-A: Yes, Dijkstra's algorithm handles cycles correctly. However, K-shortest paths finds only simple paths (no cycles).
-
-**Q: How accurate is the resilience testing?**
-A: It accurately models static network disruption. Real-world factors like partial capacity loss aren't modeled.
-
----
-
-<div align="center">
-
-**Built with ❤️ for the supply chain optimization community**
-[⬆ Back to Top](#-advanced-graph-based-supply-chain-optimizer)
 
 </div>
